@@ -1,0 +1,25 @@
+$primary: #34CBE6; // imp text
+$primaryBg: #30bfd9; // bg 
+$secondary: #00495D;
+$secondary-bg: #03212A;
+$secondary-light: #32325D;
+$oceanGreen: #47B881;
+$Malibu: #8095FF;
+$link-color: $primary;
+$link-hover-color: $primary;
+$btn-white-space: nowrap;
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+);
+
+$container-max-widths: (
+  sm: 580px,
+  md: 780px,
+  lg: 1000px,
+  xl: 1400px,
+);
