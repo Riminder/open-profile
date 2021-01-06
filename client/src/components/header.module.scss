@@ -1,0 +1,49 @@
+@import '../styles/helpers.scss';
+
+
+
+.header {
+    display: flex;
+    justify-content: center;
+}
+
+.logo {
+    height: 3rem;
+}
+.navbar {
+    border-bottom: 1px solid #ccc;
+    margin: auto;
+    padding: 0.7rem 1rem 0.5rem 1rem;
+    display: flex;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.08);
+    z-index: 99;
+    width: 100%;
+    a {
+        img  {
+            width: 5rem;
+            height: auto;
+        }
+    }
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    &__inner {
+        margin-left: 1rem;
+    }
+}
+
+.title {
+    color: #222;
+    font-weight: 600;
+    font-size: 21px;
+    margin-bottom: 4px; 
+}
+
+.toolbar {
+    color: $primary;
+    font-size: 16px;
+    opacity: 0.6;
+}
