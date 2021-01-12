@@ -9,6 +9,7 @@ var morgan     = require('morgan');
 const pdf      = require('html-pdf');
 const path     = require("path");
 const multer   = require("multer");
+var fs = require('fs');
 var cors = require('cors')
 
 
@@ -94,7 +95,11 @@ router.route('/')
 				pdf.create(dynamicResume(req.body, themeOptions, req.file.path), options).toStream((err, stream) => {
 					if (err) return res.end(err.stack)
 					res.setHeader('Content-type', 'application/pdf')
-					stream.pipe(res)
+					// fs.unlinkSync(req.file.path);
+					fs.unlink(req.file.path,function(err){
+						if(err) return res.end(err);
+						stream.pipe(res)
+					});  
 				})
 			if(err)
 				res.status(500).send({ error: err.stack})
