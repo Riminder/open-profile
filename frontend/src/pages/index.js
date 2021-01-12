@@ -1,5 +1,8 @@
 import React, { useState } from "react"
 import CreatableSelect from 'react-select/creatable'
+import moment from 'moment'
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDownload, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { connect } from "react-redux"
@@ -23,6 +26,8 @@ const Home = props => {
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")
+  const [birthDate, setBirthDate] = useState(new Date())
+  const [familySituation, setFamilySituation] = useState("")
   const [phone, setPhone] = useState("")
   const [address, setAddress] = useState("")
   const [title, setTitle] = useState("")
@@ -143,6 +148,8 @@ const Home = props => {
       firstName,
       lastName,
       email,
+      birthDate: moment(birthDate).format('DD/MM/YYYY'),
+      familySituation,
       phone,
       address,
       title,
@@ -165,16 +172,15 @@ const Home = props => {
       }
     }
   }
-  console.log('languages', languages)
 
   return (
     <Layout>
-      <div className="row pt-md-0" style={{maxWidth: '100vw'}}>
+      <div className="row pt-md-0" style={{maxWidth: '100vw', backgroundColor: 'rgba(0, 0, 0, 0.03)'}}>
         <div className="col-12 col-lg-6 builder">
           <div className="row">
-            <div className="col-lg-12">
+            <div className="col-lg-12 wrapper">
               <div className="card card-body bg-white border-light mb-6">
-                <h3 className="center intro"><a href="hrflow.ai" target="_blank">HrFlow.ai</a> Resume builder</h3>
+                <h3 className="center intro"><a href="https://hrflow.ai" target="_blank">HrFlow.ai</a> Resume builder</h3>
                 <div className="card-header border-light p-3 mb-4 mb-md-0 highlighted">
                   <h3 className="h5 mb-0">information personnelle</h3>
                 </div>
@@ -252,13 +258,24 @@ const Home = props => {
                     <div className="col-12 col-lg-6">
                       <div className="mb-4">
                         <label htmlFor="cartInputAddress1">Date de naissance *</label>
-                        <input type="text" placeholder="13/11/1990" className="form-control" />
+                        {/* <DatePicker
+                          onChange={setBirthDate}
+                          value={birthDate}
+                          className="form-control"
+                        /> */}
+                        <DatePicker selected={birthDate} onChange={date => setBirthDate(date)} />
                       </div>
                     </div>
                     <div className="col-12 col-lg-6">
                       <div className="mb-4">
                         <label htmlFor="cartInputAddress1">situation familiale *</label>
-                        <input type="text" placeholder="Célibataire" className="form-control" />
+                        <input
+                          type="text"
+                          placeholder="Célibataire"
+                          className="form-control"
+                          onChange={(event) => setFamilySituation(event.target.value)}
+                          value={familySituation}
+                        />
                       </div>
                     </div>
                     <div className="col-12 col-lg-12">
@@ -496,13 +513,13 @@ const Home = props => {
                   <div className="xlarge bold">{firstName ? firstName : 'John'} {lastName ? lastName : 'Doe'}</div>
                   <div className="secondary">
                     <div>
-                      Né le 13/11/1990
+                      Né le {moment(birthDate).format('DD/MM/YYYY')}
                     </div>
                     <div>
-                      30 ans
+                      {moment().diff(moment(birthDate), 'years') || null} ans
                     </div>
                     <div>
-                      Célibataire
+                      {familySituation}
                     </div>
                   </div>
                 </div> 
@@ -531,7 +548,7 @@ const Home = props => {
                         <div className="list__item-left">{experience.dateStart}-{experience.dateEnd}</div>
                         <div>
                           <div>
-                            <span className="bold">{experience.title}</span>, <span className="italic">{experience.company}</span>
+                            <span className="bold">{experience.jobTitle}</span>, <span className="italic">{experience.company}</span>
                           </div>
                           <div>
                             {experience.description}
@@ -587,23 +604,13 @@ const Home = props => {
               </ul>
             </div>
           </div>
-          <div className="mt-3"
-            style={{
-              position: 'fixed',
-              bottom: '0px',
-              background: 'rgb(235, 244, 246)',
-              width: '51%',
-              padding: '20px',
-              display: 'flex',
-              justifyContent: 'center',
-            }}
-          >
+        </div>
+        <div className="mt-3 button-download">
             <button onClick={() => DownloadFile()} className="button" style={{ width: '70%'}}>
               <FontAwesomeIcon className="icon-left" icon={faDownload} />
               Télécharger
             </button>
           </div>
-        </div>
       </div>
     </Layout>
   )
