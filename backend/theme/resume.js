@@ -2,7 +2,6 @@ const dynamicResume = (options, themeOptions, path)=>{
     return `
     <!doctype html>
 <html lang="en">
-
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -109,14 +108,24 @@ const dynamicResume = (options, themeOptions, path)=>{
         }
 
         .list-item-left {
-            max-width: 4rem;
-            flex: 0 0 4rem;            
+            width: 100px;
+            max-width: 100px;
+            height: 0;
             margin-right: 1rem;
         }
 
         .skills {
             list-style: none;
             display: flex;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: start;
+            -ms-flex-pack: start;
+             justify-content: flex-start;
+            -webkit-box-align: start;
+            -ms-flex-align: start;
+            align-items: flex-start;
         }
 
         .skills li {
@@ -167,6 +176,15 @@ const dynamicResume = (options, themeOptions, path)=>{
         .center {
             text-align: center;
         }
+
+        ul {
+            margin: 0;
+            padding: 0;
+        }
+
+        .break-line {
+            max-width: 25rem;
+        }
         
 
     </style>
@@ -181,24 +199,21 @@ const dynamicResume = (options, themeOptions, path)=>{
             <div class="xlarge bold">${options.name}</div>
             <div class="secondary">
                 <div>
-                    Né le 13/11/1990
+                    Né le ${options.birthDate}
                 </div>
+                <div>${options.phone }</div>
+                <div>${options.email}</div>
                 <div>
-                    30 ans
-                </div>
-                <div>
-                    Célibataire
+                    ${options.family_situation}
                 </div>
             </div>
         </div> 
         <div class="header-right">
             <div class="primary mrr1">
-                <div>${options.address ? options.address :  '2627 Hanover St, Palo Alto, CA 94304, États-Unis'}</div>
-                <div>${options.phone ? options.phone : '00221 55 5 555' }</div>
-                <div>${options.email ? options.email : 'john@doe.com'}</div>
+                <div>${options.address}</div>
             </div>
             <div class="photo">
-                <img src="file:////home/riminder/node-api/node-api/${path}" />
+                <img src="file:///home/riminder/Riminder/open-profile/backend/${path}" />
             </div>
         </div>
     </div>
@@ -214,8 +229,8 @@ const dynamicResume = (options, themeOptions, path)=>{
             return (
                 `<li class="list-item">
                     <div class="list-item-left">${exp.dateStart} - ${exp.dateEnd}</div>
-                    <div>
-                        <div class="break-line">
+                    <div class="break-line">
+                        <div>
                             <span class="bold">${exp.jobTitle}</span>, <span class="italic">${exp.company}</span>
                         </div>
                         <div>
@@ -224,7 +239,7 @@ const dynamicResume = (options, themeOptions, path)=>{
                     </div>
                 </li>`
             )
-        })}
+        }).join('')}
     </ul>
     <div class="divider">
         <div class="divider-border"></div>
@@ -235,7 +250,7 @@ const dynamicResume = (options, themeOptions, path)=>{
             return (
                 `<li class="list-item">
                     <div class="list-item-left">${edu.dateStart} - ${edu.dateEnd}</div>
-                    <div>
+                    <div class="break-line">
                         <div>
                             <span class="bold">${edu.title}</span>, <span class="italic">${edu.school}</span>
                         </div>
@@ -245,7 +260,7 @@ const dynamicResume = (options, themeOptions, path)=>{
                     </div>
                 </li>`
             )
-        })}
+        }).join('')}
     </ul>
     <div class="divider">
         <div class="divider-border"></div>
@@ -254,7 +269,7 @@ const dynamicResume = (options, themeOptions, path)=>{
     <ul class="skills">
         ${ JSON.parse(options.skills).map(skill => {
             return (
-                `<li>${skill}</li>`
+                `<li>${skill}${', '}</li>`
             )
         }).join('')}
     </ul>
