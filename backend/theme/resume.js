@@ -1,3 +1,5 @@
+var moment = require('moment');
+
 const dynamicResume = (options, themeOptions, path)=>{
     return `
     <!doctype html>
@@ -48,15 +50,15 @@ const dynamicResume = (options, themeOptions, path)=>{
             flex: 1 1 50%;
             display: -webkit-box;
             display: -ms-flexbox;
+            -webkit-box-pack: end;
+            -ms-flex-pack: end;
             display: flex;
-            -webkit-box-pack: justify;
-            -ms-flex-pack: justify;
             justify-content: flex-end;
         }
         
         .photo img {
-            width: 5rem;
-            height: 5rem;
+            width: 80px;
+            height: 80px;
             border: 1px solid #34CBE6;
         }
         
@@ -83,7 +85,7 @@ const dynamicResume = (options, themeOptions, path)=>{
             border: 3px solid #34CBE6;
             width: 100px;
             height: 0;
-            margin-right: 1rem;
+            margin-right: 20px;
         }
 
         .divider-title {
@@ -93,6 +95,7 @@ const dynamicResume = (options, themeOptions, path)=>{
             padding: 0!important;
             margin: 0important;
             list-style: none;
+            margin-bottom: 1rem;
         }
         .list-item {
             display: -webkit-box;
@@ -112,24 +115,31 @@ const dynamicResume = (options, themeOptions, path)=>{
             max-width: 100px;
             height: 0;
             margin-right: 1rem;
+            opacity: 0.6;
         }
 
         .skills {
             list-style: none;
-            display: flex;
             display: -webkit-box;
-            display: -ms-flexbox;
+            display: -webkit-flex;
+            -webkit-flex-wrap: wrap;
             display: flex;
-            -webkit-box-pack: start;
-            -ms-flex-pack: start;
-             justify-content: flex-start;
-            -webkit-box-align: start;
-            -ms-flex-align: start;
-            align-items: flex-start;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+            margin-left: 120px;
         }
 
         .skills li {
             margin-right: 5px;
+            font-weight: 600;
+        }
+
+        .languages {
+            margin-bottom: 1rem;
+            margin-left: 135px;
+        }
+
+        .languages li {
             font-weight: 600;
         }
 
@@ -209,11 +219,11 @@ const dynamicResume = (options, themeOptions, path)=>{
             </div>
         </div> 
         <div class="header-right">
-            <div class="primary mrr1">
+            <div class="primary">
                 <div>${options.address}</div>
             </div>
             <div class="photo">
-                <img src="file:///home/riminder/Riminder/open-profile/backend/${path}" />
+                <img src="file:///app/${path}" />
             </div>
         </div>
     </div>
@@ -228,7 +238,7 @@ const dynamicResume = (options, themeOptions, path)=>{
         ${JSON.parse(options.experiences).map(exp => {
             return (
                 `<li class="list-item">
-                    <div class="list-item-left">${exp.dateStart} - ${exp.dateEnd}</div>
+                    <div class="list-item-left">${moment(exp.dateStart).format('DD MMM YYYY')} <br /> ${moment(exp.dateEnd).format('DD MMM YYYY')}</div>
                     <div class="break-line">
                         <div>
                             <span class="bold">${exp.jobTitle}</span>, <span class="italic">${exp.company}</span>
@@ -249,7 +259,7 @@ const dynamicResume = (options, themeOptions, path)=>{
         ${JSON.parse(options.educations).map(edu => {
             return (
                 `<li class="list-item">
-                    <div class="list-item-left">${edu.dateStart} - ${edu.dateEnd}</div>
+                    <div class="list-item-left">${moment(edu.dateStart).format('DD MMM YYYY')} <br /> ${moment(edu.dateEnd).format('DD MMM YYYY')}</div>
                     <div class="break-line">
                         <div>
                             <span class="bold">${edu.title}</span>, <span class="italic">${edu.school}</span>
@@ -277,8 +287,8 @@ const dynamicResume = (options, themeOptions, path)=>{
         <div class="divider-border"></div>
         <div class="divider-title bold medium">Languages</div>
     </div>
-    <ul class="skills">
-        ${ options.languages.split(",").map(lang => {
+    <ul class="languages">
+        ${ JSON.parse(options.languages).map(lang => {
             return (
                 `<li>${lang}</li>`
             )
