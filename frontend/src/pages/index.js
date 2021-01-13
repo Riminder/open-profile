@@ -1,8 +1,8 @@
 import React, { useState } from "react"
 import CreatableSelect from 'react-select/creatable'
 import moment from 'moment'
-import DatePicker from "react-datepicker"
-import "react-datepicker/dist/react-datepicker.css"
+import DatePicker from "react-date-picker"
+// import "react-datepicker/dist/react-datepicker.css"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faDownload, faPlus, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { connect } from "react-redux"
@@ -26,7 +26,7 @@ const Home = props => {
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")
-  const [birthDate, setBirthDate] = useState(new Date())
+  const [birthDate, setBirthDate] = useState(moment().endOf('day').subtract(18, 'years')._d)
   const [familySituation, setFamilySituation] = useState("")
   const [phone, setPhone] = useState("")
   const [address, setAddress] = useState("")
@@ -34,15 +34,15 @@ const Home = props => {
   const [photoPath, setPhotoPath] = useState(photo)
   const [file, setFile] = useState("")
   const [experiences, setExperiences] = useState([{
-    dateStart: '',
-    dateEnd: '',
+    dateStart: new Date(),
+    dateEnd: new Date(),
     jobTitle: '',
     company: '',
     description: ''
   }])
   const [educations, setEducations] = useState([{
-    dateStart: '',
-    dateEnd: '',
+    dateStart: new Date(),
+    dateEnd: new Date(),
     title: '',
     school: '',
     description: ''
@@ -102,11 +102,17 @@ const Home = props => {
     setExperiences(newExperiences)
   }
 
+  const changeDateExperience = (value, name, index) => {
+    const newExperiences = [...experiences]
+    newExperiences[index][`${name}`] = moment(value)._d
+    setExperiences(newExperiences)
+  }
+
   const addExperience = () => {
     const newExperiences = [...experiences]
     newExperiences.push({
-      dateStart: '',
-      dateEnd: '',
+      dateStart: new Date(),
+      dateEnd: new Date(),
       jobTitle: '',
       company: '',
       description: ''
@@ -123,6 +129,12 @@ const Home = props => {
     setEducations(newEducations)
   }
 
+  const changeDateEducation = (value, name, index) => {
+    const newEducations = [...educations]
+    newEducations[index][`${name}`] = moment(value)._d
+    setEducations(newEducations)
+  }
+
   const changeEducation = (event, index) => {
     const name = event.target.name
     const value = event.target.value
@@ -134,8 +146,8 @@ const Home = props => {
   const addEducation = () => {
     const newEducations = [...educations]
     newEducations.push({
-      dateStart: '',
-      dateEnd: '',
+      dateStart: new Date(),
+      dateEnd: new Date(),
       title: '',
       school: '',
       description: ''
@@ -172,7 +184,6 @@ const Home = props => {
       }
     }
   }
-
   return (
     <Layout>
       <div className="row pt-md-0" style={{maxWidth: '100vw', backgroundColor: 'rgba(0, 0, 0, 0.03)'}}>
@@ -258,12 +269,13 @@ const Home = props => {
                     <div className="col-12 col-lg-6">
                       <div className="mb-4">
                         <label htmlFor="cartInputAddress1">Date de naissance *</label>
-                        {/* <DatePicker
+                        <DatePicker
                           onChange={setBirthDate}
                           value={birthDate}
+                          maxDate={moment().endOf('day').subtract(15, 'years')._d}
                           className="form-control"
-                        /> */}
-                        <DatePicker selected={birthDate} onChange={date => setBirthDate(date)} />
+                        />
+                        {/* <DatePicker selected={birthDate} onChange={date => setBirthDate(date)} /> */}
                       </div>
                     </div>
                     <div className="col-12 col-lg-6">
@@ -322,13 +334,26 @@ const Home = props => {
                         <div className="col-12 col-lg-6">
                           <div className="mb-4">
                             <label htmlFor="cartInputAddress1">Date de début *</label>
-                            <input value={experience.dateStart} onChange={event => changeExperience(event, index)} name="dateStart" type="text" placeholder="10/20/2018" className="form-control" />
+                            {/* <input value={experience.dateStart} onChange={event => changeExperience(event, index)} name="dateStart" type="text" placeholder="10/20/2018" className="form-control" /> */}
+                            <DatePicker
+                              onChange={value => changeDateExperience(value, 'dateStart', index)}
+                              value={experience.dateStart}
+                              name="dateStart"
+                              maxDate={new Date()}
+                              className="form-control"
+                            />
                           </div>
                         </div>
                         <div className="col-12 col-lg-6">
                           <div className="mb-4">
                             <label htmlFor="cartInputAddress1">Date de fin *</label>
-                            <input value={experience.dateEnd} onChange={event => changeExperience(event, index)} name="dateEnd" type="text" placeholder="aujourd'hui" className="form-control" />
+                            <DatePicker
+                              onChange={value => changeDateExperience(value, 'dateEnd', index)}
+                              value={experience.dateEnd}
+                              name="dateEnd"
+                              maxDate={new Date()}
+                              className="form-control"
+                            />
                           </div>
                         </div>
                         <div className="col-12 col-lg-6">
@@ -382,12 +407,11 @@ const Home = props => {
                         <div className="col-12 col-lg-6">
                           <div className="mb-4">
                             <label htmlFor="cartInputAddress1">Date de début *</label>
-                            <input
-                              type="text"
+                            <DatePicker
+                              onChange={value => changeDateEducation(value, 'dateStart', index)}
                               value={education.dateStart}
                               name="dateStart"
-                              onChange={event => changeEducation(event, index)}
-                              placeholder="10/20/2018"
+                              maxDate={new Date()}
                               className="form-control"
                             />
                           </div>
@@ -395,12 +419,11 @@ const Home = props => {
                         <div className="col-12 col-lg-6">
                           <div className="mb-4">
                             <label htmlFor="cartInputAddress1">Date de fin *</label>
-                            <input
-                              type="text"
+                            <DatePicker
+                              onChange={value => changeDateEducation(value, 'dateEnd', index)}
                               value={education.dateEnd}
                               name="dateEnd"
-                              onChange={event => changeEducation(event, index)}
-                              placeholder="aujourd'hui"
+                              maxDate={new Date()}
                               className="form-control"
                             />
                           </div>
@@ -525,7 +548,7 @@ const Home = props => {
                 </div> 
                 <div className="header__right">
                   <div className="primary mrr1">
-                    <div>{address ? address :  '2627 Hanover St, Palo Alto, CA 94304, États-Unis'}</div>
+                    <div>{address ? address :  'Adresse'}</div>
                     <div>{phone ? phone : '00221 55 5 555' }</div>
                     <div>{email ? email : 'john@doe.com'}</div>
                   </div>
@@ -535,7 +558,7 @@ const Home = props => {
                 </div>
               </div>
               <div className="title center large bold">
-                {title ? title : 'Master en Energétique et Rhénologie'}
+                {title ? title : 'Poste actuel'}
               </div>
               <div className="divider">
                 <div className="divider__border"></div>
@@ -545,7 +568,7 @@ const Home = props => {
                 { experiences.map((experience, index) => {
                     return (
                       <li key={`exp-item-${index}`} className="list__item">
-                        <div className="list__item-left">{experience.dateStart}-{experience.dateEnd}</div>
+                        <div className="list__item-left">{moment(experience.dateStart).format('MMMM YYYY')}-{moment(experience.dateEnd).format('MMMM YYYY')}</div>
                         <div>
                           <div>
                             <span className="bold">{experience.jobTitle}</span>, <span className="italic">{experience.company}</span>
@@ -567,7 +590,7 @@ const Home = props => {
                 {educations.map((education, index) => {
                   return (
                     <li key={`edu-item-${index}`}  className="list__item">
-                      <div className="list__item-left">{education.dateEnd} - {education.dateStart}</div>
+                      <div className="list__item-left">{moment(education.dateStart).format('MMMM YYYY')}-{moment(education.dateEnd).format('MMMM YYYY')}</div>
                       <div>
                         <div>
                           <span className="bold">{education.title}</span>, <span className="italic">{education.school}</span>
@@ -606,9 +629,14 @@ const Home = props => {
           </div>
         </div>
         <div className="mt-3 button-download">
-            <button onClick={() => DownloadFile()} className="button" style={{ width: '70%'}}>
+            <button
+              onClick={() => DownloadFile()}
+              className="button" 
+              style={{ width: '70%'}}
+              disabled={props.profile?.r}
+            >
               <FontAwesomeIcon className="icon-left" icon={faDownload} />
-              Télécharger
+              {props.profile?.r ? 'Téléchargement' : 'Télécharger'}
             </button>
           </div>
       </div>
