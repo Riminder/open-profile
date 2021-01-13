@@ -37,12 +37,12 @@ export const postProfile = (payload, file) => {
         fd.append('experiences', JSON.stringify(payload.experiences))
         fd.append('educations', JSON.stringify(payload.educations))
         fd.append('skills', JSON.stringify(payload.skills))
-        fd.append('languages', payload.languages.join(','))
-        axiosApi.post( '/', fd)
+        fd.append('languages', JSON.stringify(payload.languages))
+        axiosApi.post( '', fd)
             .then( response => {
                const file = new Blob([response.data])
                fileDownload(file, 'resume.pdf')
-
+               dispatch(postProfileSuccess())
             } )
             .catch( err => {
                 dispatch(postProfileFail(err))
